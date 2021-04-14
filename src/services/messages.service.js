@@ -11,7 +11,8 @@ class MessagesService {
 
     async create(data) {
         try {
-            return await this.model.create(data);
+            const message = new this.model(data);
+            return await message.save();
         } catch (error) {
             console.log(error);
         }
@@ -29,6 +30,22 @@ class MessagesService {
         try {
             return await this.model.remove({_id});
         } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async deleteByConversationId(conversationId) {
+        try{
+            return await this.model.remove({conversationId});
+        }catch (error) {
+            console.log(error);
+        }
+    }
+
+    async getByConversationId (conversationId) {
+        try{
+            return await this.model.find({conversationId}).exec();
+        }catch (error) {
             console.log(error);
         }
     }

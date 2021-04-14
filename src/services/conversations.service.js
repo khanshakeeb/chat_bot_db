@@ -6,7 +6,12 @@ class ConversationsService {
     }
 
     async get(_id) {
-        return await this.model.findOne({_id});
+        try {
+            return await this.model.findOne({_id});
+        }catch (error) {
+            console.log(error);
+        }
+
     }
 
     async create(data) {
