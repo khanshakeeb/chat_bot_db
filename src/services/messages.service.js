@@ -34,17 +34,17 @@ class MessagesService {
     }
 
     async deleteByConversationId(conversationId) {
-        try{
+        try {
             return await this.model.remove({conversationId});
-        }catch (error) {
+        } catch (error) {
             console.log(error);
         }
     }
 
-    async getByConversationId (conversationId) {
-        try{
+    async getByConversationId(conversationId) {
+        try {
             return await this.model.find({conversationId}).exec();
-        }catch (error) {
+        } catch (error) {
             console.log(error);
         }
     }

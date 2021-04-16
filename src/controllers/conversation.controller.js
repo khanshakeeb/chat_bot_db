@@ -1,11 +1,11 @@
-import conversation from '../services/conversations.service';
+import conversations from '../services/conversations.service';
 import messages from '../services/messages.service';
 
 class ConversationController {
     async create(req, res) {
         try {
             const { body } = req;
-            const  data = await conversation.create({
+            const  data = await conversations.create({
                 title: body.title,
                 botId: body.botId
             });
@@ -26,11 +26,11 @@ class ConversationController {
     async get(req, res) {
         try {
             const {params} = req;
-            const data = await conversation.get(params.id);
-            const messages = await message.getByConversationId(params.id) || [];
+            const data = await conversations.get(params.id);
+            const messagesData = await messages.getByConversationId(params.id);
             res.json({
                 conversation: data,
-                messages
+                messages: messagesData
             });
         } catch (error) {
             res.json(error);
@@ -40,8 +40,8 @@ class ConversationController {
     async delete(req, res) {
         try {
             const {params} = req;
-            const isDeleted = await conversation.delete(params.id);
-            if (isDeleted) await message.deleteByConversationId(params.id);
+            const isDeleted = await conversations.delete(params.id);
+            if (isDeleted) await messages.deleteByConversationId(params.id);
             res.json(isDeleted);
         } catch (error) {
             res.json(error);
@@ -51,7 +51,7 @@ class ConversationController {
     async update(req, res) {
         try {
             const {params, body} = req;
-            const data = await conversation.update(params.id, body);
+            const data = await conversations.update(params.id, body);
             res.json(data);
         } catch (error) {
             res.json(error);
