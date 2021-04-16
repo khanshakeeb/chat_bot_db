@@ -1,12 +1,23 @@
 import conversation from '../services/conversations.service';
-import message from '../services/messages.service';
+import messages from '../services/messages.service';
 
 class ConversationController {
     async create(req, res) {
         try {
-            const {body} = req;
-            const data = await conversation.create(body);
-            res.json(data);
+            const { body } = req;
+            const  data = await conversation.create({
+                title: body.title,
+                botId: body.botId
+            });
+            const messageData = await messages.create({
+                conversationId : data._id,
+                messageBy : body.messageBy || 'User',
+                message : body.title
+            });
+            res.json({
+                conversation: data,
+                messages: [messageData]
+            });
         } catch (error) {
             res.json(error);
         }

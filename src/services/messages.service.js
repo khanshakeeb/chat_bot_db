@@ -11,8 +11,7 @@ class MessagesService {
 
     async create(data) {
         try {
-            const message = new this.model(data);
-            return await message.save();
+            return await this.model.create(data);
         } catch (error) {
             console.log(error);
         }

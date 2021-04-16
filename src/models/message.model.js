@@ -15,7 +15,13 @@ const messageSchema = Schema({
     message: {
         type: String,
         required: true
-    }
+    },
+    intents: [
+        {
+            confidence: String,
+            name: String
+        }
+    ]
 },{timestamps: true});
 
 export default mongoose.model('messages', messageSchema);
