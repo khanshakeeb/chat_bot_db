@@ -6,37 +6,20 @@ class ConversationsService {
     }
 
     async get(_id) {
-        try {
-            return await this.model.findOne({_id});
-        }catch (error) {
-            console.log(error);
-        }
-
+        return await this.model.findOne({_id});
     }
 
     async create(data) {
-        try {
-            const conversation = new this.model(data);
-            return await conversation.save();
-        } catch (error) {
-            console.log(error);
-        }
+        const conversation = new this.model(data);
+        return await conversation.save();
     }
 
     async update(_id, data) {
-        try {
-            return await this.model.update({_id}, data);
-        } catch (error) {
-            console.log(error);
-        }
+        return await this.model.update({_id}, data);
     }
 
     async delete(_id) {
-        try {
-            return await this.model.remove({_id});
-        } catch (error) {
-            console.log(error);
-        }
+        return await this.model.remove({_id});
     }
 }
 

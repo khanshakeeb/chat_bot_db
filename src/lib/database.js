@@ -3,7 +3,6 @@ import configurations from '../../config';
 
 class Connection {
     constructor(config) {
-        console.log(config);
         const {url} = config;
         this.connectionString = url;
     }

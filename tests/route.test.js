@@ -25,78 +25,36 @@ describe('Check if server is running', ()=>{
 });
 
 describe('Check for conversation CRUD', ()=>{
-    it('Get conversation', (done)=>{
-        chai.request(app).get('/api/v1/conversation')
-            .send({id:1})
-            .end((error,response)=>{
-                response.should.have.status(200);
-                done();
-            });
-    });
 
-    it('POST conversation', (done)=>{
+    it('Check conversation required fields', (done)=>{
+        const data = {}
         chai.request(app).post('/api/v1/conversation')
-            .send({id:1})
+            .send(data)
             .end((error,response)=>{
-                response.should.have.status(200);
+                response.should.have.status(400);
+                response.body.should.have.be.a('object');
+                response.body.should.have.property('name').to.eq('ValidationError');
                 done();
             });
     });
 
-    it('DELETE conversation', (done)=>{
-        chai.request(app).delete('/api/v1/conversation')
-            .send({id:1})
+    it('Create conversation record 1', (done)=>{
+        const data = {
+            title: "this is new conversation",
+            botId: "86aa71cf31c9dc05fd95e5sss",
+            messageBy: "User"
+        }
+        chai.request(app).post('/api/v1/conversation')
+            .send(data)
             .end((error,response)=>{
                 response.should.have.status(200);
+                response.body.should.have.be.a('object');
+                response.body.should.have.property('conversation');
+                response.body.should.have.nested.property('conversation._id');
+                response.body.should.have.property('messages').to.be.length.gt(0);
+                response.body.should.have.nested.property('messages.0._id');
                 done();
             });
     });
 
-    it('PUT conversation', (done)=>{
-        chai.request(app).put('/api/v1/conversation')
-            .send({id:1})
-            .end((error,response)=>{
-                response.should.have.status(200);
-                done();
-            });
-    });
-});
-
-
-describe('Check for message CRUD', ()=>{
-    it('Get message', (done)=>{
-        chai.request(app).get('/api/v1/message')
-            .send({id:1})
-            .end((error,response)=>{
-                response.should.have.status(200);
-                done();
-            });
-    });
-
-    it('POST message', (done)=>{
-        chai.request(app).post('/api/v1/message')
-            .send({id:1})
-            .end((error,response)=>{
-                response.should.have.status(200);
-                done();
-            });
-    });
-
-    it('DELETE message', (done)=>{
-        chai.request(app).delete('/api/v1/message')
-            .send({id:1})
-            .end((error,response)=>{
-                response.should.have.status(200);
-                done();
-            });
-    });
-
-    it('PUT message', (done)=>{
-        chai.request(app).put('/api/v1/message')
-            .send({id:1})
-            .end((error,response)=>{
-                response.should.have.status(200);
-                done();
-            });
-    });
 });

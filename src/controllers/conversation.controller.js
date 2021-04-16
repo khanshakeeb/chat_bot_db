@@ -1,25 +1,26 @@
 import conversations from '../services/conversations.service';
 import messages from '../services/messages.service';
+import {STATUS_CODE, APP_CONST} from '../utils';
 
 class ConversationController {
     async create(req, res) {
         try {
-            const { body } = req;
-            const  data = await conversations.create({
+            const {body} = req;
+            const data = await conversations.create({
                 title: body.title,
                 botId: body.botId
             });
             const messageData = await messages.create({
-                conversationId : data._id,
-                messageBy : body.messageBy || 'User',
-                message : body.title
+                conversationId: data._id,
+                messageBy: body.messageBy || APP_CONST.MESSAGE_BY_HUMAN,
+                message: body.title
             });
             res.json({
                 conversation: data,
                 messages: [messageData]
-            });
+            }, STATUS_CODE.SUCCESS);
         } catch (error) {
-            res.json(error);
+            res.json(error, STATUS_CODE.BAD_REQUEST);
         }
     }
 
@@ -31,9 +32,9 @@ class ConversationController {
             res.json({
                 conversation: data,
                 messages: messagesData
-            });
+            }, STATUS_CODE.SUCCESS);
         } catch (error) {
-            res.json(error);
+            res.json(error, STATUS_CODE.BAD_REQUEST);
         }
     }
 
@@ -42,9 +43,9 @@ class ConversationController {
             const {params} = req;
             const isDeleted = await conversations.delete(params.id);
             if (isDeleted) await messages.deleteByConversationId(params.id);
-            res.json(isDeleted);
+            res.json(isDeleted, STATUS_CODE.SUCCESS);
         } catch (error) {
-            res.json(error);
+            res.json(error, STATUS_CODE.BAD_REQUEST);
         }
     }
 
@@ -52,9 +53,9 @@ class ConversationController {
         try {
             const {params, body} = req;
             const data = await conversations.update(params.id, body);
-            res.json(data);
+            res.json(data, STATUS_CODE.SUCCESS);
         } catch (error) {
-            res.json(error);
+            res.json(error, STATUS_CODE.BAD_REQUEST);
         }
     }
 }
